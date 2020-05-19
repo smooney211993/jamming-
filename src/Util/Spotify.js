@@ -1,15 +1,15 @@
 let accessToken ;
-const clientId = ' d66fb2e9a8384c6191cd8bf883b56e3f';
+const clientId = 'd66fb2e9a8384c6191cd8bf883b56e3f';
 const redirectUri = "http://localhost:3000/";
 const Spotify = {
     getAccessToken (){
         if(accessToken){
             return accessToken
         }
-        const accessTokenMatch = windows.location.href.match(/access_token=([^&]*)/);
-        const expiresInMatch =  windows.location.href.match(/expires_in=([^&]*)/);
+        const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
+        const expiresInMatch =  window.location.href.match(/expires_in=([^&]*)/);
 
-        if (accessTokenMatch && expiryinMatch){
+        if (accessTokenMatch && expiresInMatch){
             accessToken = accessTokenMatch[1];
             const expiresIn = Number(expiresInMatch[1]);
             
@@ -22,46 +22,90 @@ const Spotify = {
             window.location = accessUrl;
         }
     },
- 
-}
 
-
-const search = async (term) => {
-    try {
-        const accessToken = Spotify.getAccessToken()
-    const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
-    {
-        headers: {
-            Authorization : `Bearer ${accessToken}`
+    async search(term) {
+        try {
+        this.getAccessToken()
+        const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
+        {
+            headers: {
+                Authorization : `Bearer ${accessToken}`
+            }
         }
-    }
-    )
-
-    if(response.ok){
-        const jsonResponse = await response.json()
-        if(!jsonResponse.tracks){
-            return [];
-        }
-       return jsonResponse.map((track)=>{
-           return {
-               id : track.id,
-               Name : track.name,
-               Artist : track.artist[0].name,
-               Album : track.album.name,
-               URI : track.uri
-
-           }
-       })
-    }
-
+        )
+        
     
-    } catch (error) {
+        if(response.ok){
+            
+            const jsonResponse = await response.json()
+            console.log(jsonResponse) 
+            if(!jsonResponse.tracks){
+                return [];
+            }
+           return jsonResponse.tracks.items.map((track)=>({
+                     id : track.id,
+                    name : track.name,
+                    artist : track.artists[0].name,
+                    album : track.album.name,
+                    uri : track.uri
         
+                }))
+          
+                 
+        }
+        
+        } catch (error) {
+            console.log(error)
+        }
+
+    },
+
+    async savePlayList(name, trackUris){
+        try {
+            if(!name || !trackUris.length) {
+                return ; 
+            }
+    
+            const accessToken = this.getAccessToken()
+            const headers = {Authorization: `Bearer ${accessToken}`};
+            let userId;
+            let playListId;
+            const response = await fetch(`https://api.spotify.com/v1/me`, {headers: headers})
+            if(response.ok){
+                const jsonResponse = await response.json()
+                 userId = jsonResponse.id
+                
+            }
+
+            const playListResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists/`,{
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify({name: name})
+            })
+            if(playListResponse.ok){
+                const playListResponseJsonRespone = await playListResponse.json()
+                playListId = playListResponseJsonRespone.id
+            }
+
+            const addPlaylistResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playListId}/tracks`,{
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify({uris: trackUris})
+            })
+
+
+
+            
+
+
+            
+        } catch (error) {
+            console.log(error)
+        }
+        
+
     }
-
-
-        
-
+ 
 }
 
 
