@@ -23,7 +23,7 @@ class App extends React.Component {
     this.search = this.search.bind(this);
   }
   componentDidMount() {
-    window.addEventListener('load', Spotify.search(''));
+    Spotify.getAccessToken();
   }
   updatePlayListName(name){
     this.setState({playListName: name})
@@ -32,8 +32,8 @@ class App extends React.Component {
 
   addTrack(track){
     let tracks = this.state.playListTracks;
-    if (tracks.find(savedTrack => savedTrack.id === track.id)) {
-      return;
+    if(tracks.includes(track)){
+      return
     }
     
     this.setState({

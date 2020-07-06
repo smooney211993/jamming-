@@ -25,7 +25,8 @@ const Spotify = {
 
     async search(term) {
         try {
-        this.getAccessToken()
+       let accessToken = this.getAccessToken()
+       console.log(accessToken)
         
         const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
         {
@@ -53,6 +54,8 @@ const Spotify = {
                 }))
           
                  
+        } else {
+            throw new Error('search request failed')
         }
         
         } catch (error) {
@@ -76,6 +79,8 @@ const Spotify = {
                 const jsonResponse = await response.json()
                  userId = jsonResponse.id
                 
+            } else {
+                throw new Error('user Id request failed')
             }
 
             const playListResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists/`,{
@@ -86,6 +91,8 @@ const Spotify = {
             if(playListResponse.ok){
                 const playListResponseJsonRespone = await playListResponse.json()
                 playListId = playListResponseJsonRespone.id
+            } else {
+                throw new Error('playlist id request failed')
             }
 
             const addPlaylistResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playListId}/tracks`,{
