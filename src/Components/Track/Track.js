@@ -1,7 +1,8 @@
-import React from 'react'
-import './Track.css'
+//import React from 'react';
+import React, {useState} from 'react';
+import './Track.css';
 
-
+/*
 class Track extends React.Component {
     constructor(props){
         super(props)
@@ -37,6 +38,41 @@ class Track extends React.Component {
             </div>
         )
     }
+}
+
+*/
+
+const Track = (props) => {
+    const {onAdd, onRemove, isRemoval, track} = props;
+    const addTrack = () => {
+        onAdd(track);
+
+    };
+
+    const removeTrack = () =>{
+        onRemove(track);
+    };
+
+    const renderAction = () => {
+        if(isRemoval) {
+            return <button className="Track-action" onClick={removeTrack}>-</button>
+        } else {
+            return <button className="Track-action" onClick={addTrack}>+</button>
+
+        }
+    };
+
+    return (
+        <div className="Track">
+            <div className="Track-information">
+                <h3>{track.name}</h3>
+                <p>{track.artist} | {track.album}</p>
+            </div>
+            {renderAction()}   
+        </div>
+    )
+
+
 }
 
 export default Track;
