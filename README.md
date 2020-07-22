@@ -1,5 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+This project is the react capstone- codeacademy project. The css design is all of their own, however the the coding aspect of it is originally all my work. 
+The course only teaches react via class components but I have decided to write in both for comparision.
+In my opinion react hooks are easier to read and write as it does all the binding with methods and doesnt have state properties.
+
 ## Available Scripts
 
 In the project directory, you can run:
