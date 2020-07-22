@@ -1,10 +1,12 @@
-import React from 'react';
+//import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import SearchBar from '../SearchBar/SearchBar.js'
 import SearchResults from '../SearchResults/SearchResults.js'
 import Playlist from '../Playlist/Playlist.js'
 import Spotify from '../../Util/Spotify.js'
 
+/*
 
 class App extends React.Component {
   constructor(props){
@@ -88,6 +90,77 @@ class App extends React.Component {
       </div>
     )
   }
+}
+
+*/
+
+const App = () => {
+  const [searchResults, setSearchResults] = useState([]);
+  const [playListName, setPlayListName] = useState('My Playlist');
+  const [playListTracks, setPlayListTracks] = useState([]);
+
+  useEffect(()=>{
+    Spotify.getAccessToken();
+  })
+
+  const updatePlayListName = (name) =>{
+    setPlayListName(name);
+
+  };
+
+  const addTrack = (track) => {
+    let tracks = playListTracks;
+    if(tracks.includes(track)){
+      return
+    }
+    setPlayListTracks([...playListTracks,track]);
+
+  };
+
+  const removeTrack = (track) => {
+    setPlayListTracks(playListTracks.filter((currentTrack)=> currentTrack.id !== track.id));
+
+  };
+
+  const savePlayList = () =>{
+    const trackURIs = playListTracks.map(track => track.uri);
+    Spotify.savePlayList(playListName, trackURIs);
+    //this.setState({playListName: 'New Playlist', playListTracks: []});
+    setPlayListName('New Playlist');
+    setPlayListTracks([]);
+
+  };
+
+  const search = async (term) =>{
+    const search = await Spotify.search(term);
+    setSearchResults(search); 
+  }
+
+  return (
+    <div>
+      <h1>Ja<span className="highlight">mmm</span>ing</h1>
+      <div className="App">
+        <SearchBar onSearch={search} />
+        <div className="App-playlist">
+          <SearchResults
+           searchResults={searchResults}
+           onAdd={addTrack}
+           />
+
+          <Playlist 
+          playListName ={playListName}
+          playListTracks={playListTracks}
+          onRemove={removeTrack}
+          onNameChange={updatePlayListName}
+          onSave={savePlayList}
+            />
+          
+        </div>
+      </div>
+    </div>
+  )
+
+
 }
 
 export default App;
