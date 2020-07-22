@@ -1,8 +1,8 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This project is the react capstone- codeacademy project. The css design is all of their own, however the the coding aspect of it is originally all my work. 
-The course only teaches react via class components but I have decided to write in both for comparision.
-In my opinion react hooks are easier to read and write as it does all the binding with methods and doesnt have state properties.
+This project is the react capstone- codeacademy project. Here i have demonstrated my knoweledge in react, creating an application that interacts with the spotify API. It uses fetch requests to retrieve music from their Api, it allows the user to save the songs in a playlist and then saves it to their spotify account.
+
+The course only teaches react using class components, however ive decided to write the application using react hooks. 
 
 ## Available Scripts
 
