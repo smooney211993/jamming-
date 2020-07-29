@@ -134,6 +134,7 @@ const App = () => {
 
   const savePlayList = () =>{
     const trackURIs = playListTracks.map(track => track.uri);
+    // iterates through the playlists array and returns a new array that consists of the track uri
     Spotify.savePlayList(playListName, trackURIs);
     setPlayListName('New Playlist');
     setPlayListTracks([]);
