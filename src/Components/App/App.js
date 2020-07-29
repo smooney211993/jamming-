@@ -8,6 +8,9 @@ import Spotify from '../../Util/Spotify.js'
 
 /*
 
+//project first written using class components as how codeacademy taught, however ive decided to rewrite the application using react hooks so i can compare which method is easier to read.
+Both methods have the same level of performance.
+
 class App extends React.Component {
   constructor(props){
     super(props);
@@ -101,10 +104,13 @@ const App = () => {
 
   useEffect(()=>{
     Spotify.getAccessToken();
+    // executes the getaccess token every singletime the application renders
   })
 
   const updatePlayListName = (name) =>{
     setPlayListName(name);
+
+    // updates playlistname
 
   };
 
@@ -115,25 +121,31 @@ const App = () => {
     }
     setPlayListTracks([...playListTracks,track]);
 
+    // addtracks to the playlist
+
   };
 
   const removeTrack = (track) => {
     setPlayListTracks(playListTracks.filter((currentTrack)=> currentTrack.id !== track.id));
+
+    //removes tracks from playlist
 
   };
 
   const savePlayList = () =>{
     const trackURIs = playListTracks.map(track => track.uri);
     Spotify.savePlayList(playListName, trackURIs);
-    //this.setState({playListName: 'New Playlist', playListTracks: []});
     setPlayListName('New Playlist');
     setPlayListTracks([]);
+
+    // saves the playlist through a post request
 
   };
 
   const search = async (term) =>{
     const search = await Spotify.search(term);
     setSearchResults(search); 
+    // searchs for tracks using the spotify api
   }
 
   return (
